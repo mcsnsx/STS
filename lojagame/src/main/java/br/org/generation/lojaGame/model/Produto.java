@@ -1,4 +1,4 @@
-package lojagames.model;
+package br.org.generation.lojaGame.model;
 
 import java.math.BigDecimal;
 

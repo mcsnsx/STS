@@ -1,4 +1,4 @@
-package lojagames.controller;
+package br.org.generation.lojaGame.controller;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lojagames.model.Categoria;
-import lojagames.repository.CategoriaRepository;
+import br.org.generation.lojaGame.model.Categoria;
+import br.org.generation.lojaGame.repository.CategoriaRepository;
 
 @RestController
 @RequestMapping("/categorias")
@@ -38,8 +38,7 @@ public class CategoriaController {
 		return categoriaRepository.findById(id)
 				.map(resposta -> ResponseEntity.ok(resposta))
 				.orElse(ResponseEntity.notFound().build());
-	}
-	
+	}  
 	@GetMapping ("/tipo/{tipo}")
 	public ResponseEntity <List<Categoria>> getByTipo(@PathVariable String tipo){
 		return ResponseEntity.ok(categoriaRepository.findAllByTipoContainingIgnoreCase(tipo));
@@ -57,7 +56,7 @@ public class CategoriaController {
 				.orElse(ResponseEntity.notFound().build());	
 	}
 	
-	@DeleteMapping ("/{id}")
+	@DeleteMapping ("/{id}") 
 	public ResponseEntity <?> delete (@PathVariable long id){
 		return categoriaRepository.findById(id)
 				.map(check -> {categoriaRepository.deleteById(id);
@@ -66,3 +65,4 @@ public class CategoriaController {
 	}
 
 }
+

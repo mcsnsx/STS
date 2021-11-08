@@ -1,4 +1,4 @@
-package lojagames.controller;
+package br.org.generation.lojaGame.controller;
 
 import java.util.List;
 
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lojagames.model.Produto;
-import lojagames.repository.ProdutoRepository;
+import br.org.generation.lojaGame.model.Produto;
+import br.org.generation.lojaGame.repository.ProdutoRepository;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")

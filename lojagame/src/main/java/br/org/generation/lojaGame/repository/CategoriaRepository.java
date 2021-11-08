@@ -1,11 +1,11 @@
-package lojagames.repository;
+package br.org.generation.lojaGame.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import lojagames.model.Categoria;
+import br.org.generation.lojaGame.model.Categoria;
 
 @Repository
 public interface CategoriaRepository extends JpaRepository <Categoria, Long>{

@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.org.generation</groupId>
-	<artifactId>lojaGames</artifactId>
+	<artifactId>lojaGame</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>lojagames</name>
-	<description>Loja de Games</description>
+	<name>lojagame</name>
+	<description>Loja dos Games</description>
 	<properties>
 		<java.version>16</java.version>
 	</properties>
