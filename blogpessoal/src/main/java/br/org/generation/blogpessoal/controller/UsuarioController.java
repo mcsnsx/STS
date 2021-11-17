@@ -44,7 +44,7 @@ public class UsuarioController {
 				.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());				
 	}
 	
-	@PostMapping("/cadastras")
+	@PostMapping("/cadastrar")
 	public ResponseEntity<Usuario> postUsuario(@Valid @RequestBody Usuario usuario){
 		return usuarioService.cadastrarUsuario(usuario)
 				.map(respostaCadastro -> ResponseEntity.status(HttpStatus.CREATED).body(respostaCadastro))
@@ -57,6 +57,5 @@ public class UsuarioController {
 				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
 				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
 	}
-	
 
 }

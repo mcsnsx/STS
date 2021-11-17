@@ -1,7 +1,5 @@
 package br.org.generation.lojaGame.model;
 
-import java.time.LocalDate;
-
 public class UsuarioLogin {
 	
 	private long id;
@@ -14,8 +12,6 @@ public class UsuarioLogin {
 	
 	private String token;
 	
-	private LocalDate dataNascimento;
-
 	public long getId() {
 		return id;
 	}
