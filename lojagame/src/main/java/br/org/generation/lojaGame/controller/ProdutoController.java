@@ -1,5 +1,6 @@
 package br.org.generation.lojaGame.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -57,8 +58,23 @@ public class ProdutoController {
 	}
 	
 	@DeleteMapping ("/{id}")
-	public void delete (@PathVariable long id) {
-		repository.deleteById(id);
+	public ResponseEntity<?> delete (@PathVariable long id) {
+		return repository.findById(id)
+				.map(resposta -> {
+					repository.deleteById(id);
+					return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+				})
+				.orElse(ResponseEntity.notFound().build());
+	}
+	
+	@GetMapping("/preco_maior/{preco}")
+	public ResponseEntity<List<Produto>> getPrecoMaiorQue(@PathVariable BigDecimal preco){
+		return ResponseEntity.ok(repository.findByPrecoGreaterThanOrderByPreco(preco));
+	}
+	
+	@GetMapping("preco_menor/{preco}")
+	public ResponseEntity<List<Produto>> getPrecoMenorQue(@PathVariable BigDecimal preco){
+		return ResponseEntity.ok(repository.findByPrecoLessThanOrderByPrecoDesc(preco));
 	}
 
 }

@@ -2,6 +2,8 @@ package br.org.generation.lojaGame.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -33,12 +35,15 @@ public class UsuarioControllerTest {
 	@Autowired
 	private UsuarioService usuarioService;
 	
+	private LocalDate dataNascimento = LocalDate.parse("1990-07-22", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	private LocalDate dataNascimentoMenor18 = LocalDate.parse("2010-05-01", DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	
 	@Test
 	@Order(1)
 	@DisplayName("Cadastrar um Usuário")
 	public void deveCriarUmUsuario() {
 		
-		HttpEntity<Usuario> requisicao = new HttpEntity<Usuario>(new Usuario (0L, "Paulo Antunes", "paulo_antunes@email.com.br", "13465278"));
+		HttpEntity<Usuario> requisicao = new HttpEntity<Usuario>(new Usuario (0L, "Paulo Antunes", "paulo_antunes@email.com.br", "13465278", dataNascimento));
 		ResponseEntity<Usuario> resposta = testRestTemplate
 				.exchange("/usuarios/cadastrar", HttpMethod.POST, requisicao, Usuario.class);
 		
@@ -51,8 +56,8 @@ public class UsuarioControllerTest {
 	@Order(2)
 	@DisplayName("Não deve permeitir usuários duplicados")
 	public void naoDeveDuplicarUsuario() {
-		usuarioService.cadastrarUsuario(new Usuario(0L, "Maria da Silva", "maria_silva@email.com.br", "13465278"));
-		HttpEntity<Usuario> requisicao =  new HttpEntity<Usuario>(new Usuario(0L, "Maria da Silva", "maria_silva@email.com.br", "13465278"));
+		usuarioService.cadastrarUsuario(new Usuario(0L, "Maria da Silva", "maria_silva@email.com.br", "13465278", dataNascimento));
+		HttpEntity<Usuario> requisicao =  new HttpEntity<Usuario>(new Usuario(0L, "Maria da Silva", "maria_silva@email.com.br", "13465278", dataNascimento));
 		ResponseEntity<Usuario> resposta = testRestTemplate
 				.exchange("/usuarios/cadastrar", HttpMethod.POST, requisicao, Usuario.class);
 		assertEquals(HttpStatus.BAD_REQUEST, resposta.getStatusCode());
@@ -62,8 +67,8 @@ public class UsuarioControllerTest {
 	@Order(3)
 	@DisplayName("Alterar um usuário")
 	public void deveAtualizarUmUsuario() {
-		Optional<Usuario> usuarioCreate = usuarioService.cadastrarUsuario(new Usuario(0L, "Juliana Andrews", "juliana_andrews@email.com.br", "juliana123"));
-		Usuario usuarioUpdate = new Usuario(usuarioCreate.get().getId(), "Juliana Andrews Ramos", "juliana_ramos@email.com.br", "juliana123");
+		Optional<Usuario> usuarioCreate = usuarioService.cadastrarUsuario(new Usuario(0L, "Juliana Andrews", "juliana_andrews@email.com.br", "juliana123", dataNascimento));
+		Usuario usuarioUpdate = new Usuario(usuarioCreate.get().getId(), "Juliana Andrews Ramos", "juliana_ramos@email.com.br", "juliana123", dataNascimento);
 		HttpEntity<Usuario> requisicao = new HttpEntity<Usuario>(usuarioUpdate);
 		ResponseEntity<Usuario> resposta = testRestTemplate
 				.withBasicAuth("root", "root")
@@ -78,14 +83,29 @@ public class UsuarioControllerTest {
 	@Order(4)
 	@DisplayName("Listar todos os Usuários")
 	public void deveMostrarTodosUsuarios() {
-		usuarioService.cadastrarUsuario(new Usuario(0L, "Sabrina Sanches", "sabrina_sanches@email.com.br", "sabrina123"));
-		usuarioService.cadastrarUsuario(new Usuario(0L, "Ricardo Marques", "ricardo_marques@email.com.br", "ricardo123"));
+		usuarioService.cadastrarUsuario(new Usuario(0L, "Sabrina Sanches", "sabrina_sanches@email.com.br", "sabrina123", dataNascimento));
+		usuarioService.cadastrarUsuario(new Usuario(0L, "Ricardo Marques", "ricardo_marques@email.com.br", "ricardo123", dataNascimento));
 		
 		ResponseEntity<String> resposta = testRestTemplate
 				.withBasicAuth("root", "root")
 				.exchange("/usuarios/all", HttpMethod.GET, null, String.class);
 		assertEquals(HttpStatus.OK, resposta.getStatusCode());
 				
+	}
+	
+	@Test
+	@Order(5)
+	@DisplayName("Apagar um Usuário")
+	public void deveDeletarUmUsuario() {
+		
+		Optional<Usuario> usuarioDelete = usuarioService.cadastrarUsuario(new Usuario(0L, 
+				"Felicia Ramos", "felicia_ramos@email.com.br", "felicia123", dataNascimento));
+		
+		ResponseEntity<String> resposta = testRestTemplate
+				.withBasicAuth("root", "root")
+				.exchange("/usuarios/delete/" + usuarioDelete.get().getId(), HttpMethod.DELETE, null, String.class);
+		
+		assertEquals(HttpStatus.NO_CONTENT, resposta.getStatusCode());
 	}
 
 }
